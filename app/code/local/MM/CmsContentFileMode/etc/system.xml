@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<config>
+    <sections>
+        <cms>
+            <groups>
+                <mm_cmscontentfilemode translate="label" module="mm_cmscontentfilemode">
+                    <label>Save CMS content to static file</label>
+                    <sort_order>200</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <enabled_static_block translate="label">
+                            <label>Static Blocks enabled</label>
+                            <frontend_type>multiselect</frontend_type>
+                            <sort_order>10</sort_order>
+                            <source_model>mm_cmscontentfilemode/system_config_source_cms_blocks</source_model>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </enabled_static_block>
+                        <enabled_static_page translate="label">
+                            <label>Cms Pages enabled</label>>
+                            <frontend_type>multiselect</frontend_type>
+                            <sort_order>10</sort_order>
+                            <source_model>mm_cmscontentfilemode/system_config_source_cms_pages</source_model>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </enabled_static_page>
+                    </fields>
+                </mm_cmscontentfilemode>
+            </groups>
+        </cms>
+    </sections>
+</config>
