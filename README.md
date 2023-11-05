@@ -1,6 +1,9 @@
 # Manage content of CMS Static blocks and Pages from files
+
 The extension creates a file copy with the content of enabled static blocks and CMS pages. 
+
 The copy is kept synchronized in both directions, meaning that saving a static block updates the file copy and vice versa! 
+
 This allows working directly on the file instead of working in the textarea without autocompletion and other benefits of an IDE can provide.
 In addition to this, it is possible to include the files in a workflow that purges CSS (which was the original scope of this approch).
 
