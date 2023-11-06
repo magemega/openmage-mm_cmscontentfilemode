@@ -1,3 +1,4 @@
 app/code/local/MM/CmsContentFileMode     app/code/local/MM/CmsContentFileMode
-lib/tailwindcss    lib/tailwindcss
+app/design/frontend/base/default/layout/mm/tailwindcss.xml    app/design/frontend/base/default/layout/mm/tailwindcss.xml
+lib/tailwindcss/*    lib/tailwindcss/
 app/etc/modules/*    app/etc/modules/
