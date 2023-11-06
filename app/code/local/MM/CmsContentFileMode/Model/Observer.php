@@ -42,14 +42,19 @@ class MM_CmsContentFileMode_Model_Observer
                     }
 
                     if (file_exists($filePath)) {
+                        
+                        $this->compileTailwindcss($templatePath . $filename, $storeId);
+
                         $fileContent = file_get_contents($filePath);
                         if ($fileContent !== $content) {
+                            
+
                             file_put_contents($filePath, $content);
-                            Mage::getSingleton("adminhtml/session")->addSuccess("Static content updated to file: " . $filePath);
+                            Mage::getSingleton("adminhtml/session")->addSuccess("Static content updated to file: " . $templatePath . $filename);
                         }
                     } else {
                         file_put_contents($filePath, $content);
-                        Mage::getSingleton("adminhtml/session")->addSuccess("Static content saved to file: " . $filePath);
+                        Mage::getSingleton("adminhtml/session")->addSuccess("Static content saved to file: " . $templatePath . $filename);
                     }
                 }  
             }
@@ -98,11 +103,11 @@ class MM_CmsContentFileMode_Model_Observer
 
                             $object->setContent($fileContent);
                             $object->save();
-                            Mage::getSingleton("adminhtml/session")->addNotice("Static content updated from file: " . $filePath);
+                            Mage::getSingleton("adminhtml/session")->addNotice("Static content updated from file: " . $templatePath . $filename);
                         }
                     } else {
                         // silently create new file
-                        Mage::log("Static content file not found created: " . $filePath);
+                        Mage::log("Static content file not found created: " . $templatePath . $filename);
                         file_put_contents($filePath, $content);
                     }
                 }  
