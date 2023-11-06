@@ -34,6 +34,32 @@ class MM_CmsContentFileMode_Helper_Data extends Mage_Core_Helper_Abstract
         return $templatePaths;
     }
 
+    public function getSkinPaths()
+    {
+        $templatePaths = array();
+
+        $stores = Mage::app()->getStores();
+        foreach ($stores as $store) {
+            $package = Mage::getStoreConfig(self::XML_PATH_CONFIG_PACKAGE, $store->getId());
+            if (!$package) {
+                continue;
+            }
+            $theme = Mage::getStoreConfig(self::XML_PATH_CONFIG_THEME, $store->getId()) ?: 'default';
+            $templatePath = sprintf('frontend/%s/%s/css/', 
+                $package,
+                $theme);
+
+
+            $templateDesignPath = Mage::getBaseDir('design') . DS . $templatePath;
+            if (!is_dir($templateDesignPath)) {
+                mkdir($templateDesignPath, 0777, true);
+            }
+            $templatePaths[$store->getId()] = $templatePath;
+        }
+
+        return $templatePaths;
+    }
+
     public function isEnabledFor($type, $entityId, $storeId = null) {        
         $enabledEntityIds = Mage::getStoreConfig(
             sprintf('cms/mm_cmscontentfilemode/enabled_%s', $type),

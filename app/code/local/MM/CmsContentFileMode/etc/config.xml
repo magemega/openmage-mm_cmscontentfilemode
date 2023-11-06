@@ -37,4 +37,13 @@
             </mm_cmscontentfilemode>
         </models>
     </global>
+    <frontend>
+        <layout>
+            <updates>
+                <mm_cmscontentfilemode>
+                    <file>mm/tailwindcss.xml</file>
+                </mm_cmscontentfilemode>
+            </updates>
+        </layout>
+    </frontend>
 </config>

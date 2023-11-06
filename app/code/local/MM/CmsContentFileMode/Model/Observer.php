@@ -89,9 +89,13 @@ class MM_CmsContentFileMode_Model_Observer
                     // Check if the file exists
                     if (file_exists($filePath)) {
                         $fileContent = file_get_contents($filePath);
-
+                        
+                        
                         // Write the content to the file
                         if ($fileContent !== $content) {
+                            
+                            $this->compileTailwindcss($templatePath . $filename, $storeId);
+
                             $object->setContent($fileContent);
                             $object->save();
                             Mage::getSingleton("adminhtml/session")->addNotice("Static content updated from file: " . $filePath);
@@ -103,6 +107,24 @@ class MM_CmsContentFileMode_Model_Observer
                     }
                 }  
             } 
+        }
+    }
+
+    protected function compileTailwindcss($filePath, $storeId) {
+        // getBaseDir lib
+        $skinPaths = $this->getHelper()->getSkinPaths();
+        $skinPath = isset($skinPaths[$storeId]) ? $skinPaths[$storeId] : null;
+        $cssOutputPath = "../../skin" . DS . $skinPath . "tailwind.css";
+        $filePath = "../../app/design" . DS . $filePath;
+        if ($skinPath !== null) {
+            $tailwindCli =  "cd " . Mage::getBaseDir('lib') . DS . "tailwindcss; ./tailwindcss";
+            $cmd =  sprintf(
+                '%s --content %s -o %s --minify',
+                $tailwindCli,
+                $filePath,
+                $cssOutputPath
+            );
+            exec($cmd, $output, $return);
         }
     }
 
