@@ -1,2 +1,3 @@
 app/code/local/MM/CmsContentFileMode     app/code/local/MM/CmsContentFileMode
+lib/tailwindcss    lib/tailwindcss
 app/etc/modules/*    app/etc/modules/

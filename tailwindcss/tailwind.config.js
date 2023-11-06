@@ -1,0 +1,14 @@
+/** @type {import('tailwindcss').Config} */
+module.exports = {
+  prefix: '',
+  corePlugins: {
+    preflight: false,
+  },
+  content: [
+    //'../../app/design/frontend/rwd/**/**/*.html',
+  ],
+  theme: {
+    extend: {},
+  },
+  plugins: [],
+}
