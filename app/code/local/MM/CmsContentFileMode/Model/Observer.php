@@ -22,7 +22,7 @@ class MM_CmsContentFileMode_Model_Observer
             $templatePaths = $this->getHelper()->getTemplatePaths($blockType);
 
             foreach ($stores as $storeId) {
-                if(!$this->getHelper()->isEnabledFor($blockType, $object->getId())) {
+                if(!$this->getHelper()->isEnabledFor($blockType, $object->getId(), $storeId)) {
                     return;
                 }
 
@@ -45,13 +45,13 @@ class MM_CmsContentFileMode_Model_Observer
                        
                         
                         $fileContent = file_get_contents($filePath);
-                        if ($fileContent !== $content || $this->getHelper()->forceTailwindCompile()) {
+                        if ($fileContent !== $content || $this->getHelper()->forceTailwindCompile($storeId)) {
                             
                             file_put_contents($filePath, $content);
                             $this->getHelper()->getSessionMessage()->addNotice("Static content updated to file: " . $templatePath . $filename);
                             
                             if($this->getHelper()->isTailwindCompileEnabled($storeId)) {
-                                $this->compileTailwindcss($templatePath . $filename, $storeId);
+                                $this->compileTailwindcss($storeId);
                             }
                         }
                     } else {
@@ -84,7 +84,7 @@ class MM_CmsContentFileMode_Model_Observer
             $templatePaths = $this->getHelper()->getTemplatePaths($blockType);
             
             foreach ($stores as $storeId) {
-                if(!$this->getHelper()->isEnabledFor($blockType, $object->getId())) {
+                if(!$this->getHelper()->isEnabledFor($blockType, $object->getId(), $storeId)) {
                     return;
                 }
 
@@ -99,10 +99,10 @@ class MM_CmsContentFileMode_Model_Observer
                         
                         
                         // Write the content to the file
-                        if ($fileContent !== $content || $this->getHelper()->forceTailwindCompile()) {
+                        if ($fileContent !== $content || $this->getHelper()->forceTailwindCompile($storeId)) {
                             
                             if($this->getHelper()->isTailwindCompileEnabled($storeId)) {
-                                $this->compileTailwindcss($templatePath . $filename, $storeId);
+                                $this->compileTailwindcss($storeId);
                             }                           
 
                             $object->setContent($fileContent);
@@ -114,7 +114,7 @@ class MM_CmsContentFileMode_Model_Observer
                         $this->getHelper()->getSessionMessage()->addNotice("Static content file not found, silently created: " . $templatePath . $filename);
                         file_put_contents($filePath, $content);
                         if($this->getHelper()->isTailwindCompileEnabled($storeId)) {
-                            $this->compileTailwindcss($templatePath . $filename, $storeId);
+                            $this->compileTailwindcss($storeId);
                         }
                     }
                 }  
@@ -122,17 +122,20 @@ class MM_CmsContentFileMode_Model_Observer
         }
     }
 
-    protected function compileTailwindcss($filePath, $storeId) {
+    protected function compileTailwindcss($storeId) {
+
         $skinPaths = $this->getHelper()->getSkinPaths();
         $skinPath = isset($skinPaths[$storeId]) ? $skinPaths[$storeId] : null;
         $cssOutputPath = "../../skin" . DS . $skinPath . "tailwind.css";
-        $filePath = "../../app/design" . DS . $filePath;
-        if ($skinPath !== null) {
+        
+        $templatePath = "../../app/design/" . DS . $this->getHelper()->getTemplatePathContent($storeId);
+        if ($skinPath !== null && $templatePath !== null) {
             // Run compile tailwindcss only once per request
-            if (Mage::registry('tailwind_compile_lock') == $skinPath) {
+            $_lockName = $this->_getCompilerLockName($skinPath, $storeId);
+            if (Mage::registry($_lockName)) {
                 return;
-            }            
-            Mage::register('tailwind_compile_lock', $skinPath);
+            }   
+            Mage::register($_lockName, true);
 
             $extraCustomCmds = [];
 
@@ -154,10 +157,10 @@ class MM_CmsContentFileMode_Model_Observer
 
             $tailwindCli =  "cd " . Mage::getBaseDir('lib') . DS . "tailwindcss; ./tailwindcss";
             $cmd =  sprintf(
-                '%s %s --content %s -o %s --minify 2>&1',
+                '%s %s --content \'%s\' -o %s --minify 2>&1',
                 $tailwindCli,
                 implode(" ", $extraCustomCmds),
-                $filePath,
+                $templatePath,
                 $cssOutputPath
             );
             exec($cmd, $output, $return);            
@@ -176,6 +179,10 @@ class MM_CmsContentFileMode_Model_Observer
             
             return $return === 0;
         }
+    }
+
+    private function _getCompilerLockName($skinPath, $storeId) {
+        return 'tailwind_compile_lock_'.md5($skinPath.$storeId);
     }
 
     /**

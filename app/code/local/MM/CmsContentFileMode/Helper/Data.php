@@ -9,7 +9,7 @@ class MM_CmsContentFileMode_Helper_Data extends Mage_Core_Helper_Abstract
     const TYPE_CMSBLOCK = 'static_block';
     const TYPE_CMSPAGE = 'static_page';
 
-    public function getTemplatePaths($type)
+    public function getTemplatePaths($type = self::TYPE_CMSBLOCK)
     {
         $templatePaths = array();
 
@@ -34,6 +34,25 @@ class MM_CmsContentFileMode_Helper_Data extends Mage_Core_Helper_Abstract
         }
 
         return $templatePaths;
+    }
+
+    /**
+     * Get template path content for tailwindcss
+     *
+     * @param int $storeId
+     * @return string|null
+     */
+    public function getTemplatePathContent($storeId) 
+    {
+        $package = Mage::getStoreConfig(self::XML_PATH_CONFIG_PACKAGE, $storeId);
+        if (!$package) {
+            return null;
+        }
+        $theme = Mage::getStoreConfig(self::XML_PATH_CONFIG_THEME, $storeId) ?: 'default';
+        $templatePath = sprintf('frontend/%s/%s/template/cms/**/*.html', 
+            $package,
+            $theme);
+        return $templatePath;
     }
 
     public function getSkinPaths()
