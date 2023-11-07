@@ -103,8 +103,7 @@ class MM_CmsContentFileMode_Model_Observer
                             
                             if($this->getHelper()->isTailwindCompileEnabled($storeId)) {
                                 $this->compileTailwindcss($templatePath . $filename, $storeId);
-                            }
-                           
+                            }                           
 
                             $object->setContent($fileContent);
                             $object->save();
