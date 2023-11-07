@@ -1,5 +1,16 @@
 # Manage content of CMS Static blocks and Pages from files
 
+## 🔥 Auto compile Tailwindcss [BETA]
+If you're a fan of Tailwind CSS, you must definitely try the BETA version that auto-compiles the files and generates a CSS with Tailwind classes!
+
+Check it out this branch: https://github.com/magemega/openmage-mm_cmscontentfilemode/tree/tailwindcss
+
+More info here: https://github.com/OpenMage/magento-lts/discussions/3629#discussioncomment-7496192
+
+--
+
+### Description
+
 The extension creates a file copy and keeps it synced with the content of enabled static blocks and CMS pages.
 
 The copy is kept synchronized in both directions, meaning that saving a static block updates the file copy and vice versa! 
