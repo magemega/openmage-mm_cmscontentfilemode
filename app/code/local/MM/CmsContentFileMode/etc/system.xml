@@ -46,6 +46,9 @@
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
                             <comment>Always compile Tailwind CSS, even if the content is not changed.</comment>
+                            <depends>
+                                <enable_tailwindcss>1</enable_tailwindcss>
+                            </depends>
                         </force_tailwindcompile>
                     </fields>
                 </mm_cmscontentfilemode>
