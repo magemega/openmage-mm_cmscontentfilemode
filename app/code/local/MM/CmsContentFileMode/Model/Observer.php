@@ -37,24 +37,26 @@ class MM_CmsContentFileMode_Model_Observer
                         $oldFilePath = Mage::getBaseDir('design') . DS . $templatePath . $oldFilename;
                         if (file_exists($oldFilePath)) {
                             rename($oldFilePath, $filePath);
-                            Mage::getSingleton("adminhtml/session")->addNotice("Rename " . $templatePath . $oldFilename . " to " . $templatePath . $filename);
+                            $this->getHelper()->getSessionMessage()->addNotice("Rename " . $templatePath . $oldFilename . " to " . $templatePath . $filename);
                         }
                     }
 
                     if (file_exists($filePath)) {
+                       
                         
-                        $this->compileTailwindcss($templatePath . $filename, $storeId);
-
                         $fileContent = file_get_contents($filePath);
                         if ($fileContent !== $content) {
                             
-
                             file_put_contents($filePath, $content);
-                            Mage::getSingleton("adminhtml/session")->addSuccess("Static content updated to file: " . $templatePath . $filename);
+                            $this->getHelper()->getSessionMessage()->addNotice("Static content updated to file: " . $templatePath . $filename);
+                            
+                            if($this->getHelper()->isTailwindCompileEnabled($storeId)) {
+                                $this->compileTailwindcss($templatePath . $filename, $storeId);
+                            }
                         }
                     } else {
                         file_put_contents($filePath, $content);
-                        Mage::getSingleton("adminhtml/session")->addSuccess("Static content saved to file: " . $templatePath . $filename);
+                        $this->getHelper()->getSessionMessage()->addNotice("Static content saved to file: " . $templatePath . $filename);
                     }
                 }  
             }
@@ -99,11 +101,14 @@ class MM_CmsContentFileMode_Model_Observer
                         // Write the content to the file
                         if ($fileContent !== $content) {
                             
-                            $this->compileTailwindcss($templatePath . $filename, $storeId);
+                            if($this->getHelper()->isTailwindCompileEnabled($storeId)) {
+                                $this->compileTailwindcss($templatePath . $filename, $storeId);
+                            }
+                           
 
                             $object->setContent($fileContent);
                             $object->save();
-                            Mage::getSingleton("adminhtml/session")->addNotice("Static content updated from file: " . $templatePath . $filename);
+                            $this->getHelper()->getSessionMessage()->addNotice("Static content updated from file: " . $templatePath . $filename);
                         }
                     } else {
                         // silently create new file
@@ -124,12 +129,22 @@ class MM_CmsContentFileMode_Model_Observer
         if ($skinPath !== null) {
             $tailwindCli =  "cd " . Mage::getBaseDir('lib') . DS . "tailwindcss; ./tailwindcss";
             $cmd =  sprintf(
-                '%s --content %s -o %s --minify',
+                '%s --content %s -o %s --minify 2>&1',
                 $tailwindCli,
                 $filePath,
                 $cssOutputPath
             );
-            exec($cmd, $output, $return);
+            exec($cmd, $output, $return);            
+            if ($return === 0) {
+                $returnMsg = $skinPath . "tailwind.css - output: " ."\n" . implode("\n", $output);
+                $this->getHelper()->getSessionMessage()->addNotice(
+                    sprintf("Styles compiled to %s", $returnMsg)
+                );                
+            } else {
+                $this->getHelper()->getSessionMessage()->addError("Problem with compiling tailwindcss, check permission in lib/tailwindcss/tailwindcss");
+            }
+            
+            return $return === 0 ? $skinPath . "tailwind.css" : false;
         }
     }
 

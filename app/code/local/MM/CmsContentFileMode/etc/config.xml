@@ -46,4 +46,11 @@
             </updates>
         </layout>
     </frontend>
+    <default>
+        <cms>
+            <mm_cmscontentfilemode>
+                <enable_tailwindcss>0</enable_tailwindcss>
+            </mm_cmscontentfilemode>
+        </cms>
+    </default>
 </config>

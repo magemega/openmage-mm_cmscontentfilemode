@@ -3,6 +3,7 @@ class MM_CmsContentFileMode_Helper_Data extends Mage_Core_Helper_Abstract
 {
     const XML_PATH_CONFIG_PACKAGE = 'design/package/name';
     const XML_PATH_CONFIG_THEME = 'design/theme/template';
+    const XML_PATH_CONFIG_TAILWIND = 'cms/mm_cmscontentfilemode/enable_tailwindcss';
 
     const TYPE_CMSBLOCK = 'static_block';
     const TYPE_CMSPAGE = 'static_page';
@@ -58,6 +59,20 @@ class MM_CmsContentFileMode_Helper_Data extends Mage_Core_Helper_Abstract
         }
 
         return $templatePaths;
+    }
+
+    public function isTailwindCompileEnabled($storeId = null)
+    {
+        return Mage::getStoreConfigFlag(self::XML_PATH_CONFIG_TAILWIND, $storeId);
+    }
+
+    public function getSessionMessage()
+    {
+        if (Mage::app()->getStore()->isAdmin()) {
+            return Mage::getSingleton("adminhtml/session");
+        } elseif (Mage::helper('core')->isDevAllowed()) {
+            return Mage::getSingleton("customer/session");
+        }
     }
 
     public function isEnabledFor($type, $entityId, $storeId = null) {        
