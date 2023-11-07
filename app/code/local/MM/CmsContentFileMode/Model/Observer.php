@@ -149,7 +149,7 @@ class MM_CmsContentFileMode_Model_Observer
                 Mage::logException(new Exception( $output[0] ." [..truncate..] \n\n"));
             }
             
-            return $return === 0 ? $skinPath . "tailwind.css" : false;
+            return $return === 0;
         }
     }
 
