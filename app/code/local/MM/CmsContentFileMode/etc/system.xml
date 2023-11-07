@@ -36,6 +36,7 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
+                            <comment>Enable Tailwind CSS for static blocks and pages. You can customize tailwind compiler by creating your custom skin/frontend/package/theme/css/tailwind.config.js and/or skin/frontend/package/theme/css/tailwind-base.css.</comment>
                         </enable_tailwindcss>
                         <force_tailwindcompile translate="label">
                             <label>Force always compile Tailwind CSS</label>
