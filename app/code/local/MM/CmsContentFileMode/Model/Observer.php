@@ -112,8 +112,11 @@ class MM_CmsContentFileMode_Model_Observer
                         }
                     } else {
                         // silently create new file
-                        Mage::log("Static content file not found created: " . $templatePath . $filename);
+                        $this->getHelper()->getSessionMessage()->addNotice("Static content file not found, silently created: " . $templatePath . $filename);
                         file_put_contents($filePath, $content);
+                        if($this->getHelper()->isTailwindCompileEnabled($storeId)) {
+                            $this->compileTailwindcss($templatePath . $filename, $storeId);
+                        }
                     }
                 }  
             } 
