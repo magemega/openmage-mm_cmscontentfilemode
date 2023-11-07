@@ -138,12 +138,15 @@ class MM_CmsContentFileMode_Model_Observer
             );
             exec($cmd, $output, $return);            
             if ($return === 0) {
-                $returnMsg = $skinPath . "tailwind.css - output: " ."\n" . implode("\n", $output);
                 $this->getHelper()->getSessionMessage()->addNotice(
-                    sprintf("Styles compiled to %s", $returnMsg)
+                    sprintf(" %s - styles compiled to %s", 
+                        implode("\n", $output), 
+                        $skinPath . "tailwind.css"
+                    )
                 );                
             } else {
-                $this->getHelper()->getSessionMessage()->addError("Problem with compiling tailwindcss, check permission in lib/tailwindcss/tailwindcss");
+                $this->getHelper()->getSessionMessage()->addError("Problem with compiling tailwindcss, check chmod +x permission for ./lib/tailwindcss/tailwindcss");
+                Mage::logException(new Exception( $output[0] ." [..truncate..] \n\n"));
             }
             
             return $return === 0 ? $skinPath . "tailwind.css" : false;
