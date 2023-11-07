@@ -69,6 +69,9 @@ class MM_CmsContentFileMode_Helper_Data extends Mage_Core_Helper_Abstract
 
     public function forceTailwindCompile($storeId = null)
     {
+        if (!Mage::app()->getStore()->isAdmin() AND !Mage::helper('core')->isDevAllowed()) {
+            return false;
+        }
         return Mage::getStoreConfigFlag(self::XML_PATH_CONFIG_TAILWIND_FORCE_COMPILE, $storeId);
     }
 
