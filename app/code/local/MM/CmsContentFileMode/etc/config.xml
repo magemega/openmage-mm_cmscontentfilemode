@@ -50,6 +50,7 @@
         <cms>
             <mm_cmscontentfilemode>
                 <enable_tailwindcss>0</enable_tailwindcss>
+                <force_tailwindcompile>0</force_tailwindcompile>
             </mm_cmscontentfilemode>
         </cms>
     </default>

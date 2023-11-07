@@ -45,7 +45,7 @@ class MM_CmsContentFileMode_Model_Observer
                        
                         
                         $fileContent = file_get_contents($filePath);
-                        if ($fileContent !== $content) {
+                        if ($fileContent !== $content || $this->getHelper()->forceTailwindCompile()) {
                             
                             file_put_contents($filePath, $content);
                             $this->getHelper()->getSessionMessage()->addNotice("Static content updated to file: " . $templatePath . $filename);
@@ -99,7 +99,7 @@ class MM_CmsContentFileMode_Model_Observer
                         
                         
                         // Write the content to the file
-                        if ($fileContent !== $content) {
+                        if ($fileContent !== $content || $this->getHelper()->forceTailwindCompile()) {
                             
                             if($this->getHelper()->isTailwindCompileEnabled($storeId)) {
                                 $this->compileTailwindcss($templatePath . $filename, $storeId);
@@ -123,12 +123,17 @@ class MM_CmsContentFileMode_Model_Observer
     }
 
     protected function compileTailwindcss($filePath, $storeId) {
-        // getBaseDir lib
         $skinPaths = $this->getHelper()->getSkinPaths();
         $skinPath = isset($skinPaths[$storeId]) ? $skinPaths[$storeId] : null;
         $cssOutputPath = "../../skin" . DS . $skinPath . "tailwind.css";
         $filePath = "../../app/design" . DS . $filePath;
         if ($skinPath !== null) {
+            // Run compile tailwindcss only once per request
+            if (Mage::registry('tailwind_compile_lock') == $skinPath) {
+                return;
+            }            
+            Mage::register('tailwind_compile_lock', $skinPath);
+
             $extraCustomCmds = [];
 
             $customTailwindConfig = Mage::getBaseDir('skin') . DS . $skinPath . "tailwind.config.js";
