@@ -129,17 +129,37 @@ class MM_CmsContentFileMode_Model_Observer
         $cssOutputPath = "../../skin" . DS . $skinPath . "tailwind.css";
         $filePath = "../../app/design" . DS . $filePath;
         if ($skinPath !== null) {
+            $extraCustomCmds = [];
+
+            $customTailwindConfig = Mage::getBaseDir('skin') . DS . $skinPath . "tailwind.config.js";
+            if (file_exists($customTailwindConfig)) {
+                $extraCustomCmds[] = sprintf(
+                    '--config %s',
+                    $customTailwindConfig
+                );
+            }
+
+            $customTailwindBaseCss = Mage::getBaseDir('skin') . DS . $skinPath . "tailwind-base.css";
+            if (file_exists($customTailwindBaseCss)) {
+                $extraCustomCmds[] = sprintf(
+                    '--input %s',
+                    $customTailwindBaseCss
+                );
+            }
+
             $tailwindCli =  "cd " . Mage::getBaseDir('lib') . DS . "tailwindcss; ./tailwindcss";
             $cmd =  sprintf(
-                '%s --content %s -o %s --minify 2>&1',
+                '%s %s --content %s -o %s --minify 2>&1',
                 $tailwindCli,
+                implode(" ", $extraCustomCmds),
                 $filePath,
                 $cssOutputPath
             );
             exec($cmd, $output, $return);            
             if ($return === 0) {
                 $this->getHelper()->getSessionMessage()->addNotice(
-                    sprintf(" %s - styles compiled to %s", 
+                    sprintf("%s%s - styles compiled to %s", 
+                        ($cmdCustomConfig ? "Load Custom config " . $skinPath . "tailwind.config.js" . " " : ""),
                         implode("\n", $output), 
                         $skinPath . "tailwind.css"
                     )
