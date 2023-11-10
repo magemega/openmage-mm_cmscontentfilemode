@@ -2,7 +2,7 @@
 <layout version="0.1.0">
     <default>
         <reference name="head">
-            <action method="addCss"><stylesheet>css/tailwind.css</stylesheet></action>
+            <action method="addCss" ifconfig="cms/mm_cmscontentfilemode/enable_tailwindcss"><stylesheet>css/tailwind.css</stylesheet></action>
         </reference>
     </default>
 </layout>
