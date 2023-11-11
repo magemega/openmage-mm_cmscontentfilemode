@@ -36,6 +36,15 @@ class MM_CmsContentFileMode_Helper_Data extends Mage_Core_Helper_Abstract
         return $templatePaths;
     }
 
+    public function getTemplatePathByStoreId($storeId, $type = self::TYPE_CMSBLOCK)
+    {
+        $templatePaths = $this->getTemplatePaths($type);
+        if (!isset($templatePaths[$storeId])) {
+            return null;
+        }
+        return $templatePaths[$storeId];
+    }
+
     /**
      * Get template path content for tailwindcss
      *
@@ -71,14 +80,35 @@ class MM_CmsContentFileMode_Helper_Data extends Mage_Core_Helper_Abstract
                 $theme);
 
 
-            $templateDesignPath = Mage::getBaseDir('design') . DS . $templatePath;
-            if (!is_dir($templateDesignPath)) {
-                mkdir($templateDesignPath, 0777, true);
+            $templateSkinPath = Mage::getBaseDir('skin') . DS . $templatePath;
+            if (!is_dir($templateSkinPath)) {
+                mkdir($templateSkinPath, 0777, true);
             }
             $templatePaths[$store->getId()] = $templatePath;
         }
 
         return $templatePaths;
+    }
+
+    public function getSkinPathByStoreId($storeId)
+    {
+        $skinPaths = $this->getSkinPaths();
+        if (!isset($skinPaths[$storeId])) {
+            return null;
+        }
+        return $skinPaths[$storeId];
+    }
+
+    /**
+     * Generate filename from identifier
+     *
+     * @param string $identifier
+     * @return string
+     */
+    public function getFilenameFromIdentifier($identifier)
+    {
+        $identifier = preg_replace('/[^a-z0-9]/i', '_', (string) $identifier);
+        return $identifier . '.html';
     }
 
     public function isTailwindCompileEnabled($storeId = null)
@@ -88,7 +118,7 @@ class MM_CmsContentFileMode_Helper_Data extends Mage_Core_Helper_Abstract
 
     public function forceTailwindCompile($storeId = null)
     {
-        if (!Mage::app()->getStore()->isAdmin() AND !Mage::helper('core')->isDevAllowed()) {
+        if (!$this->isTailwindCompileEnabled()) {
             return false;
         }
         return Mage::getStoreConfigFlag(self::XML_PATH_CONFIG_TAILWIND_FORCE_COMPILE, $storeId);
@@ -99,8 +129,13 @@ class MM_CmsContentFileMode_Helper_Data extends Mage_Core_Helper_Abstract
         if (Mage::app()->getStore()->isAdmin()) {
             return Mage::getSingleton("adminhtml/session");
         } elseif (Mage::helper('core')->isDevAllowed()) {
-            return Mage::getSingleton("customer/session");
+            return Mage::getSingleton("core/session");
         }
+    }
+
+    public function stripBaseDir($path)
+    {
+        return str_replace(Mage::getBaseDir() . DS, '', $path);
     }
 
     public function isEnabledFor($type, $entityId, $storeId = null) {        

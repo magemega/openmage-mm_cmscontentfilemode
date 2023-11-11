@@ -1,188 +1,125 @@
 <?php
 class MM_CmsContentFileMode_Model_Observer
 {
-    public function saveContentToFile(Varien_Event_Observer $observer)
+
+    private $_shouldRecompileTailwind = false;
+
+    /**
+     * Load content from file
+     *
+     * @param Varien_Event_Observer $observer
+     * @return void
+     */
+    public function afterLoad(Varien_Event_Observer $observer)
     {
         $object = $observer->getObject();
-        $blockType = $this->_detectBlockType($object);
+
+        $this->_processEnabledObjectForStoreId($object, [$this, 'syncFileToContent']);
+        if ($this->_shouldRecompileTailwind) {
+            $this->_processEnabledObjectForStoreId($object, [$this, 'processTailwindCss']);
+        }
+        $this->_processEnabledObjectForStoreId($object, [$this, 'registerTailwindCss']);
+    }
+    
+    /**
+     * Save content to file
+     *
+     * @param Varien_Event_Observer $observer
+     * @return void
+     */
+    public function afterSave(Varien_Event_Observer $observer)
+    {
+        $object = $observer->getObject();
         
-        if ($blockType) {
-            $identifier = $object->getIdentifier();
-            if (!$identifier) {
-                return;
-            }
+        $this->_processEnabledObjectForStoreId($object, [$this, 'renameFile']);
 
-            $content = $object->getContent();
-
-            $filename = $this->_generateFilename($identifier);
-            $stores = $object->getResource()->lookupStoreIds($object->getId());
-            if ($stores[0] == 0) {
-                $stores = array_keys(Mage::app()->getStores());
-            }
-            $templatePaths = $this->getHelper()->getTemplatePaths($blockType);
-
-            foreach ($stores as $storeId) {
-                if(!$this->getHelper()->isEnabledFor($blockType, $object->getId(), $storeId)) {
-                    return;
-                }
-
-                $templatePath = isset($templatePaths[$storeId]) ? $templatePaths[$storeId] : null;
-                if ($templatePath !== null) {
-                    
-                    $filePath = Mage::getBaseDir('design') . DS . $templatePath . $filename;
-
-                    if ($object->dataHasChangedFor('identifier')) {
-                        $oldIdentifier = $object->getOrigData('identifier');
-                        $oldFilename = $this->_generateFilename($oldIdentifier);
-                        $oldFilePath = Mage::getBaseDir('design') . DS . $templatePath . $oldFilename;
-                        if (file_exists($oldFilePath)) {
-                            rename($oldFilePath, $filePath);
-                            $this->getHelper()->getSessionMessage()->addNotice("Rename " . $templatePath . $oldFilename . " to " . $templatePath . $filename);
-                        }
-                    }
-
-                    if (file_exists($filePath)) {
-                       
-                        
-                        $fileContent = file_get_contents($filePath);
-                        if ($fileContent !== $content || $this->getHelper()->forceTailwindCompile($storeId)) {
-                            
-                            file_put_contents($filePath, $content);
-                            $this->getHelper()->getSessionMessage()->addNotice("Static content updated to file: " . $templatePath . $filename);
-                            
-                            if($this->getHelper()->isTailwindCompileEnabled($storeId)) {
-                                $this->compileTailwindcss($storeId);
-                            }
-                        }
-                    } else {
-                        file_put_contents($filePath, $content);
-                        $this->getHelper()->getSessionMessage()->addNotice("Static content saved to file: " . $templatePath . $filename);
-                    }
-                }  
-            }
-
+        $this->_processEnabledObjectForStoreId($object, [$this, 'syncContentToFile']);
+        if ($this->_shouldRecompileTailwind) {
+            $this->_processEnabledObjectForStoreId($object, [$this, 'processTailwindCss']);
         }
     }
 
-    public function loadContentFromFile(Varien_Event_Observer $observer)
-    {
-        $object = $observer->getObject();
-        $blockType = $this->_detectBlockType($object);
-        
-        if ($blockType) {
-            $identifier = $object->getIdentifier();
-            if (!$identifier) {
-                return;
-            }
-            $content = $object->getContent();
-
-            $filename = $this->_generateFilename($identifier);
-            $stores = $object->getResource()->lookupStoreIds($object->getId());
-            if ($stores[0] == 0) {
-                $stores = array_keys(Mage::app()->getStores());
-            }
-            $templatePaths = $this->getHelper()->getTemplatePaths($blockType);
-            
-            foreach ($stores as $storeId) {
-                if(!$this->getHelper()->isEnabledFor($blockType, $object->getId(), $storeId)) {
-                    return;
-                }
-
-                $templatePath = isset($templatePaths[$storeId]) ? $templatePaths[$storeId] : null;
-                if ($templatePath !== null) {
-                    
-                    $filePath = Mage::getBaseDir('design') . DS . $templatePath . $filename;
-                    
-                    // Check if the file exists
-                    if (file_exists($filePath)) {
-                        $fileContent = file_get_contents($filePath);
-                        
-                        
-                        // Write the content to the file
-                        if ($fileContent !== $content || $this->getHelper()->forceTailwindCompile($storeId)) {
-                            
-                            if($this->getHelper()->isTailwindCompileEnabled($storeId)) {
-                                $this->compileTailwindcss($storeId);
-                            }                           
-
-                            $object->setContent($fileContent);
-                            $object->save();
-                            $this->getHelper()->getSessionMessage()->addNotice("Static content updated from file: " . $templatePath . $filename);
-                        }
-                    } else {
-                        // silently create new file
-                        $this->getHelper()->getSessionMessage()->addNotice("Static content file not found, silently created: " . $templatePath . $filename);
-                        file_put_contents($filePath, $content);
-                        if($this->getHelper()->isTailwindCompileEnabled($storeId)) {
-                            $this->compileTailwindcss($storeId);
-                        }
-                    }
-                }  
-            } 
-        }
-    }
-
-    protected function compileTailwindcss($storeId) {
-
-        $skinPaths = $this->getHelper()->getSkinPaths();
-        $skinPath = isset($skinPaths[$storeId]) ? $skinPaths[$storeId] : null;
-        $cssOutputPath = "../../skin" . DS . $skinPath . "tailwind.css";
-        
-        $templatePath = "../../app/design/" . DS . $this->getHelper()->getTemplatePathContent($storeId);
-        if ($skinPath !== null && $templatePath !== null) {
-            // Run compile tailwindcss only once per request
-            $_lockName = $this->_getCompilerLockName($skinPath, $storeId);
-            if (Mage::registry($_lockName)) {
-                return;
-            }   
-            Mage::register($_lockName, true);
-
-            $extraCustomCmds = [];
-
-            $customTailwindConfig = Mage::getBaseDir('skin') . DS . $skinPath . "tailwind.config.js";
-            if (file_exists($customTailwindConfig)) {
-                $extraCustomCmds[] = sprintf(
-                    '--config %s',
-                    $customTailwindConfig
-                );
-            }
-
-            $customTailwindBaseCss = Mage::getBaseDir('skin') . DS . $skinPath . "tailwind-base.css";
-            if (file_exists($customTailwindBaseCss)) {
-                $extraCustomCmds[] = sprintf(
-                    '--input %s',
-                    $customTailwindBaseCss
-                );
-            }
-
-            $tailwindCli =  "cd " . Mage::getBaseDir('lib') . DS . "tailwindcss; ./tailwindcss";
-            $cmd =  sprintf(
-                '%s %s --content \'%s\' -o %s --minify 2>&1',
-                $tailwindCli,
-                implode(" ", $extraCustomCmds),
-                $templatePath,
-                $cssOutputPath
-            );
-            exec($cmd, $output, $return);            
-            if ($return === 0) {
+    protected function syncFileToContent($object, $filePath, $storeId)
+    {        
+        if (file_exists($filePath)) {
+            $fileContent = file_get_contents($filePath);
+            // Write the content to the file
+            $_contentDiffers = $fileContent !== $object->getContent();
+            if ($_contentDiffers) {             
+                $object->setContent($fileContent);
+                $object->save();
+                
                 $this->getHelper()->getSessionMessage()->addNotice(
-                    sprintf("%s%s - styles compiled to %s", 
-                        ($cmdCustomConfig ? "Load Custom config " . $skinPath . "tailwind.config.js" . " " : ""),
-                        implode("\n", $output), 
-                        $skinPath . "tailwind.css"
-                    )
-                );                
-            } else {
-                $this->getHelper()->getSessionMessage()->addError("Problem with compiling tailwindcss, check chmod +x permission for ./lib/tailwindcss/tailwindcss");
-                Mage::logException(new Exception( $output[0] ." [..truncate..] \n\n"));
-            }
+                    sprintf("Loaded new content from file: %s",  $this->getHelper()->stripBaseDir($filePath))
+                );
+            } 
+            $this->_shouldRecompileTailwind = $_contentDiffers || $this->getHelper()->forceTailwindCompile($storeId);
+        } else {
+            // silently create new file
+            file_put_contents($filePath, $object->getContent());
+            $this->_shouldRecompileTailwind = true;
             
-            return $return === 0;
+            $this->getHelper()->getSessionMessage()->addSuccess(
+                sprintf("Static content file not found, silently created new file: %s",  $this->getHelper()->stripBaseDir($filePath))
+            );
         }
     }
 
-    private function _getCompilerLockName($skinPath, $storeId) {
-        return 'tailwind_compile_lock_'.md5($skinPath.$storeId);
+    protected function syncContentToFile($object, $filePath, $storeId)
+    {
+        if (file_exists($filePath)) {
+            $fileContent = file_get_contents($filePath);
+            $_contentDiffers = $fileContent !== $object->getContent();
+            if ($_contentDiffers) {
+                file_put_contents($filePath, $object->getContent());
+                
+                $this->getHelper()->getSessionMessage()->addNotice(
+                    sprintf("Change saved to file: %s", $this->getHelper()->stripBaseDir($filePath))
+                );
+            }
+            $this->_shouldRecompileTailwind = $_contentDiffers || $this->getHelper()->forceTailwindCompile($storeId);
+        } else {
+            file_put_contents($filePath, $object->getContent());
+            $this->_shouldRecompileTailwind = true;
+            
+            $this->getHelper()->getSessionMessage()->addNotice(
+                sprintf("Change saved to file: %s", $this->getHelper()->stripBaseDir($filePath))
+            );
+        }
+    }
+
+    protected function renameFile($object, $filePath, $storeId)
+    {
+        if ($object->dataHasChangedFor('identifier') AND $object->getOrigData('identifier') !== null) {
+            $origFilename = $this->getHelper()->getFilenameFromIdentifier($object->getIdentifier());
+    
+            $oldIdentifier = $object->getOrigData('identifier');
+            $oldFilename = $this->getHelper()->getFilenameFromIdentifier($oldIdentifier);
+            $oldFilePath = str_replace($origFilename, $oldFilename, $filePath);
+    
+            if (file_exists($oldFilePath)) {
+                rename($oldFilePath, $filePath);
+                $this->getHelper()->getSessionMessage()->addWarning(
+                    sprintf("Rename %s → %s",  $this->getHelper()->stripBaseDir($oldFilePath),  $this->getHelper()->stripBaseDir($filePath))
+                );
+            } else {
+                $this->getHelper()->getSessionMessage()->addError(
+                    sprintf("Rename error: File %s not found",  $this->getHelper()->stripBaseDir($oldFilePath))
+                );
+            }
+        }
+    }
+
+    protected function processTailwindCss($object, $filePath, $storeId)
+    {
+        if(!$this->getHelper()->isTailwindCompileEnabled($storeId)) {
+            return;
+        }
+        if (!file_exists($filePath)) {
+            $this->getHelper()->getSessionMessage()->addError("Process tailwindcss error: File " . $filePath . " not found");
+            return;
+        }
+        $this->getHelperTailwind()->compileTailwindcss($storeId);
     }
 
     /**
@@ -205,16 +142,77 @@ class MM_CmsContentFileMode_Model_Observer
         }
     }
 
-    /**
-     * Generate filename from identifier
-     *
-     * @param string $identifier
-     * @return string
-     */
-    protected function _generateFilename($identifier)
+    private function _processEnabledObjectForStoreId($object, $_callback)
     {
-        $identifier = preg_replace('/[^a-z0-9]/i', '_', $identifier);
-        return $identifier . '.html';
+        $blockType = $this->_detectBlockType($object);
+        if ($blockType === null) {
+            return $object;
+        }
+        $identifier = $object->getIdentifier();
+        if ($identifier === null) {
+            return;
+        }
+        
+        $stores = $object->getResource()->lookupStoreIds($object->getId());
+        if ($stores[0] == 0) {
+            $stores = array_keys(Mage::app()->getStores());
+        }
+        
+        foreach ($stores as $storeId) {
+            if(!$this->getHelper()->isEnabledFor($blockType, $object->getId(), $storeId)) {
+                return;
+            }
+            $templatePath = $this->getHelper()->getTemplatePathByStoreId($storeId, $blockType);
+            if (!$templatePath) {
+                return;
+            }
+            $filename = $this->getHelper()->getFilenameFromIdentifier($object->getIdentifier());
+            $filePath = Mage::getBaseDir('design') . DS . $templatePath . $filename;
+
+            call_user_func_array($_callback, [$object, $filePath, $storeId]);
+
+        }
+
+        return $object;
+    }
+
+	public function configTinyMceEditor(Varien_Event_Observer $observer)
+	{
+        // add tinymce tailwindcss content preview
+	    $config = $observer->getConfig();
+        if(is_array($this->getHelperTailwind()->getTinyMceAdditionalCss())){
+
+	    	$config->setContentCss( 
+                implode(',', [
+                    $config->getContentCss(),
+                    implode(',', $this->getHelperTailwind()->getTinyMceAdditionalCss())
+                ])
+            );
+	    }
+
+        // config template tailwindcss
+        $configPlugins = $config->getData('plugins');
+	    $templateWysiwygPlugin = array(
+	    	array(
+	    		'name' => 'template',
+            	'src' => Mage::getBaseUrl('js').'tinymce/plugins/template/plugin.min.js'
+            )
+	    );
+        $config->setPlugins(array_merge($configPlugins, $templateWysiwygPlugin));
+        $config->setContentCss( 
+            implode(',', [
+                $config->getContentCss(),
+                $this->getHelperTailwindTinymcetemplates()->getPreviewCss()
+            ])
+        );
+
+	}
+
+    protected function registerTailwindCss($object, $filePath, $storeId)
+    {
+        if($this->getHelper()->isTailwindCompileEnabled($storeId)) {
+            $this->getHelperTailwind()->registerTailwindCss($storeId);
+        }
     }
 
     /**
@@ -223,4 +221,19 @@ class MM_CmsContentFileMode_Model_Observer
     protected function getHelper() {
         return Mage::helper('mm_cmscontentfilemode');
     }
+
+    /**
+     * @return MM_CmsContentFileMode_Helper_Tailwindcss
+     */
+    protected function getHelperTailwind() {
+        return Mage::helper('mm_cmscontentfilemode/tailwindcss');
+    }
+
+    /**
+     * @return MM_CmsContentFileMode_Helper_Tailwindcss_Tinymcetemplates
+     */
+    protected function getHelperTailwindTinymcetemplates() {
+        return Mage::helper('mm_cmscontentfilemode/tailwindcss_tinymcetemplates');
+    }
+
 }

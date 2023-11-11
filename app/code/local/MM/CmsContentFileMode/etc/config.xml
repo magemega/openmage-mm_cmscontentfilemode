@@ -6,26 +6,11 @@
         </MM_CmsContentFileMode>
     </modules>
     <global>
-        <events>
-            <model_save_after>
-                <observers>
-                    <mm_cmscontentfilemode>
-                        <type>singleton</type>
-                        <class>MM_CmsContentFileMode_Model_Observer</class>
-                        <method>saveContentToFile</method>
-                    </mm_cmscontentfilemode>
-                </observers>
-            </model_save_after>
-            <model_load_after>
-                <observers>
-                    <mm_cmscontentfilemode>
-                        <type>singleton</type>
-                        <class>MM_CmsContentFileMode_Model_Observer</class>
-                        <method>loadContentFromFile</method>
-                    </mm_cmscontentfilemode>
-                </observers>
-            </model_load_after>
-        </events>
+        <blocks>
+            <mm_cmscontentfilemode>
+                <class>MM_CmsContentFileMode_Block</class>
+            </mm_cmscontentfilemode>
+        </blocks>
         <helpers>
             <mm_cmscontentfilemode>
                 <class>MM_CmsContentFileMode_Helper</class>
@@ -36,7 +21,48 @@
                 <class>MM_CmsContentFileMode_Model</class>
             </mm_cmscontentfilemode>
         </models>
+
+        <events>
+            <model_load_after>
+                <observers>
+                    <mm_cmscontentfilemode>
+                        <type>singleton</type>
+                        <class>MM_CmsContentFileMode_Model_Observer</class>
+                        <method>afterLoad</method>
+                    </mm_cmscontentfilemode>
+                </observers>
+            </model_load_after>
+            <model_save_after>
+                <observers>
+                    <mm_cmscontentfilemode>
+                        <type>singleton</type>
+                        <class>MM_CmsContentFileMode_Model_Observer</class>
+                        <method>afterSave</method>
+                    </mm_cmscontentfilemode>
+                </observers>
+            </model_save_after>
+        </events>
     </global>
+    <adminhtml>
+        <layout>
+            <updates>
+                <mm_cmscontentfilemode>
+                    <file>mm/wysiwygtemplate.xml</file>
+                </mm_cmscontentfilemode>
+            </updates>
+        </layout>
+        <events>
+            <cms_wysiwyg_config_prepare>
+                <observers>
+                    <mm_cmscontentfilemode>
+                        <type>singleton</type>
+                        <class>MM_CmsContentFileMode_Model_Observer</class>
+                        <method>configTinyMceEditor</method>
+                    </mm_cmscontentfilemode>
+                </observers>
+            </cms_wysiwyg_config_prepare>
+        </events>
+    </adminhtml>
     <frontend>
         <layout>
             <updates>

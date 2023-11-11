@@ -1,0 +1,18 @@
+<?php $_templateList = $this->getTinyMCETemplateList(); ?>
+
+<script type="text/javascript">
+//<![CDATA[
+if(window.tinyMceWysiwygSetup)
+{
+    tinyMceWysiwygSetup.prototype.originalGetSettings = tinyMceWysiwygSetup.prototype.getSettings;
+    tinyMceWysiwygSetup.prototype.getSettings = function(mode)
+    {
+        var settings = this.originalGetSettings(mode);
+        <?php if (is_array($_templateList) AND count($_templateList) > 0) : ?>
+        settings.templates = <?php echo Zend_Json::encode($this->getTinyMCETemplateList()); ?>;
+        <?php endif; ?>
+        return settings;
+    }        
+}
+//]]>
+</script>

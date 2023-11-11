@@ -1,4 +1,6 @@
 app/code/local/MM/CmsContentFileMode     app/code/local/MM/CmsContentFileMode
+app/design/adminhtml/default/default/layout/mm/wysiwygtemplate.xml    app/design/adminhtml/default/default/layout/mm/wysiwygtemplate.xml
+app/design/adminhtml/default/default/template/mm/cmscontentfilemode/*    app/design/adminhtml/default/default/template/mm/cmscontentfilemode/
 app/design/frontend/base/default/layout/mm/tailwindcss.xml    app/design/frontend/base/default/layout/mm/tailwindcss.xml
 lib/tailwindcss/*    lib/tailwindcss/
 app/etc/modules/*    app/etc/modules/
