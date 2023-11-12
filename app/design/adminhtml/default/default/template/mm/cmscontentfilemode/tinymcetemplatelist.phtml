@@ -12,7 +12,10 @@ if(window.tinyMceWysiwygSetup)
         settings.templates = <?php echo Zend_Json::encode($this->getTinyMCETemplateList()); ?>;
         <?php endif; ?>
         <?php if ($this->isEnabled() AND $this->getAdditionalCss()) : ?>
-        settings.content_css = settings.content_css + ',<?php echo $this->getAdditionalCss(); ?>';
+        if (typeof settings.content_css == 'string') {
+            settings.content_css += ',';
+        }
+        settings.content_css = '<?php echo $this->getAdditionalCss(); ?>';
         <?php endif; ?>
         return settings;
     }
