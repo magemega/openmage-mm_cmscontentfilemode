@@ -168,6 +168,10 @@ module.exports = {
 ```
 > NOTE: It has never been tested, so I don't know what the performance of the binary compiler is with so many files.
 
+> You can experiment starting from another interesting project [openmage-theme-lanzarote](https://github.com/fballiano/openmage-theme-lanzarote) without the need to install BUN, but I don't know how it performs. Let me know!
+
+
+
 ### Support
 -------
 If you have any issues with this extension, please open an issue on GitHub.
