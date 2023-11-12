@@ -135,6 +135,16 @@ Enable TailwindCSS compiler in configuration and unlock the power of [TailwindCS
     <button class="my-button-primary">SEND</button>
     ```
 
+## Troubleshoot
+**TailwindCSS styles not rendered**
+
+If you don't see your Tailwind classes applied, make sure they are not being overridden by the CSS of your template.
+Example:
+![css-issue](https://github.com/magemega/openmage-mm_cmscontentfilemode/assets/5071467/60bde99d-d485-42e9-97d8-2d52d58dca63)
+
+
+In this case, use `!text-white` and consider setting up a prefix like `tw-` for all Tailwind styles.
+
 Screenshot
 ----------
 ![demotailwindopenmage_template](https://github.com/magemega/openmage-mm_cmscontentfilemode/assets/5071467/6fff76f3-53b3-4347-afcc-32a2f1553ad1)
@@ -175,8 +185,6 @@ module.exports = {
 > NOTE: It has never been tested, so I don't know what the performance of the binary compiler is with so many files.
 
 > You can experiment starting from another interesting project [openmage-theme-lanzarote](https://github.com/fballiano/openmage-theme-lanzarote) without the need to install BUN, but I don't know how it performs. Let me know!
-
-
 
 ### Support
 -------
