@@ -12,7 +12,7 @@
 
 ## Description
 
-The extension creates a file copy and keeps it synced with the content of enabled static blocks and CMS pages.
+The extension creates a file copy and keeps it synced with the content of enabled CMS Static Blocks and Pages.
 
 The copy is kept synchronized in both directions, meaning that saving a static block updates the file copy and vice versa! 
 
@@ -22,24 +22,27 @@ It is very useful when there is a lot of HTML markup in a CMS content, for examp
 
 In addition to this, it's possible to include the created files in a workflow for CSS purging for example (and this is the original purpose for which it was created).
 
-File creation is disabled by default, you can enable one or more static blocks or pages in "System -> Configuration -> Content Management".
+File creation is disabled by default, you can enable one or more static blocks or pages in:
+
+ `System -> Configuration -> Content Management`.
 
 ![config](https://github.com/magemega/openmage-mm_cmscontentfilemode/assets/5071467/503d5d3e-46eb-4868-8fff-815e996bbeab)
 
 
 
 The files are created in the following locations:
-- `app/design/{package}/{name}/template/cms/static_block/`_static_block_identifier.html_
-- `app/design/{package}/{name}/template/cms/static_page/`_url_key_page.html_
+- `app/design/{package}/{name}/template/cms/static_block/`**static_block_identifier**`.html`
+- `app/design/{package}/{name}/template/cms/static_page/`**url_key_page**`.html`
 
 For example:
-- `app/design/rwd/default/template/cms/static_block/category_landingpage_vip.html`
-- `app/design/rwd/default/template/cms/static_page/company.html`
+- `app/design/rwd/default/template/cms/static_block/`**category_landingpage_vip**`.html`
+- `app/design/rwd/default/template/cms/static_page/`**company**`.html`
 
 ### Notes:
 - files are created for each package/name corresponding to every enabled store view for the CMS
 - files are correctly renamed if you modify the identifier or url_key
-- ! files are not deleted if a static block/page is removed 
+- ! files are not deleted if a static block/page is removed
+- If your static block / page is assigned to multiple store views with different themes applied, files will be created in all corresponding locations
 
 ## 🔥 TailwindCSS Features [BETA]
 
@@ -108,7 +111,7 @@ Enable TailwindCSS compiler in configuration and unlock the power of [TailwindCS
     ```
     You can find default config in lib/tailwindcss/tailwind.config.js, no base CSS is added by default.
 
-    > PS: I recommend you to add a prefix 'tw-' to Tailwind classes and keep [preflight ](https://tailwindcss.com/docs/preflight) disabled if your theme is not build with TailwindCSS (for example, the rwd/default theme includes the `.block` class, which corresponds to `display: block;` in tailwind).
+    > PS: I recommend you adding the `prefix: 'tw-'` to Tailwind classes and keeping [preflight ](https://tailwindcss.com/docs/preflight) disabled if your theme is not built with TailwindCSS. For example, the rwd/default theme includes the `.block` class, which corresponds to `display: block;` in TailwindCSS. Then, instead of using `bg-fuchsia-500`, you have to use `tw-bg-fuchsia-500`. I want to make this mode configurable in the future.
 
 
     You can also create your TailwindCSS entry point to add/remove components or extend layers
