@@ -27,12 +27,12 @@ File creation is disabled by default, you can enable one or more static blocks o
 
 
 The files are created in the following locations:
-- app/design/{package}/{name}/template/cms/static_block/_static_block_identifier.html_
-- app/design/{package}/{name}/template/cms/static_page/_url_key_page.html_
+- `app/design/{package}/{name}/template/cms/static_block/`_static_block_identifier.html_
+- `app/design/{package}/{name}/template/cms/static_page/`_url_key_page.html_
 
 For example:
-- app/design/rwd/default/template/cms/static_block/category_landingpage_vip.html
-- app/design/rwd/default/template/cms/static_page/company.html
+- `app/design/rwd/default/template/cms/static_block/category_landingpage_vip.html`
+- `app/design/rwd/default/template/cms/static_page/company.html`
 
 ### Notes:
 - files are created for each package/name corresponding to every enabled store view for the CMS
