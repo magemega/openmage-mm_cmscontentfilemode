@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<layout>
+    <mm_cmscontentfilemode_wysywyg_template_list>
+        <reference name="js">
+            <block ifconfig="cms/mm_cmscontentfilemode/enable_tailwindcss" type="mm_cmscontentfilemode/adminhtml_tinymcetemplatelist" before="-" name="tinymcetemplatelist" template="mm/cmscontentfilemode/tinymcetemplatelist.phtml" />
+        </reference>
+    </mm_cmscontentfilemode_wysywyg_template_list>
+    <adminhtml_cms_page_new>
+        <update handle="mm_cmscontentfilemode_wysywyg_template_list" />
+    </adminhtml_cms_page_new>
+    <adminhtml_cms_page_edit>
+        <update handle="mm_cmscontentfilemode_wysywyg_template_list" />
+    </adminhtml_cms_page_edit>
+    <adminhtml_cms_block_edit>
+       <update handle="mm_cmscontentfilemode_wysywyg_template_list" />
+    </adminhtml_cms_block_edit>
+</layout>

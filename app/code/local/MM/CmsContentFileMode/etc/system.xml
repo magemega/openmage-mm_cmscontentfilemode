@@ -22,12 +22,42 @@
                         <enabled_static_page translate="label">
                             <label>Cms Pages enabled</label>>
                             <frontend_type>multiselect</frontend_type>
-                            <sort_order>10</sort_order>
+                            <sort_order>20</sort_order>
                             <source_model>mm_cmscontentfilemode/system_config_source_cms_pages</source_model>
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
                         </enabled_static_page>
+                        <enable_tailwindcss translate="label">
+                            <label>Enable Tailwind CSS</label>
+                            <frontend_type>select</frontend_type>
+                            <sort_order>30</sort_order>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment>
+                            <![CDATA[
+                            Enable Talwind CSS for static blocks and pages.<br />
+                            You can customize tailwind compiler by creating your own config and base css inside your skin path:<br />
+                            - skin/frontend/{package}/{theme}/css/tailwind.config.js<br />
+                            - skin/frontend/{package}/{theme}/css/tailwind-base.css.<br />
+                            ]]>
+                            </comment>
+                        </enable_tailwindcss>
+                        <force_tailwindcompile translate="label">
+                            <label>Force recompile Tailwind CSS</label>
+                            <frontend_type>select</frontend_type>
+                            <sort_order>40</sort_order>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment>Always recompile Tailwind CSS, even if the content is not changed (Allowed only for developer IPs).</comment>
+                            <depends>
+                                <enable_tailwindcss>1</enable_tailwindcss>
+                            </depends>
+                        </force_tailwindcompile>
                     </fields>
                 </mm_cmscontentfilemode>
             </groups>
