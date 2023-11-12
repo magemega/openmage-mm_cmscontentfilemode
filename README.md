@@ -6,7 +6,7 @@
 ---
 
 ## Requirements
-- [OpenMage](https://github.com/OpenMage/magento-lts) [^20.2.0] : starting from this version, tinyMCE 6 has been integrated
+- [OpenMage](https://github.com/OpenMage/magento-lts) [^20.2.0] : starting from this version, TinyMCE 6 has been integrated
 
 > NOTE: With some modifications, it would also work with the old editor. If you're interested, open a pull request, but the advice is to update.
 
@@ -50,7 +50,7 @@ For example:
 
 Enable TailwindCSS compiler in configuration and unlock the power of [TailwindCSS](https://tailwindcss.com/docs/utility-first)!
 
-1. **Compile TailwindCSS classes and preview in Tinymce Editor**
+1. **Compile TailwindCSS classes and preview in TinyMCE Editor**
     
     Utilize TailwindCSS classes in your content and automatically compile them into a CSS file that will be added to your frontend in this location:
 
@@ -79,7 +79,7 @@ Enable TailwindCSS compiler in configuration and unlock the power of [TailwindCS
         </div>
     ```
     
-    Then you can select the templates in tinyMCE and add to your content.
+    Then you can select the templates in TinyMCE and add to your content.
     ![tinyMCETemplateBtn](https://github.com/magemega/openmage-mm_cmscontentfilemode/assets/5071467/93918c71-0587-4671-b753-6e766141b6ff)
     ![tinyMCETemplatePopup](https://github.com/magemega/openmage-mm_cmscontentfilemode/assets/5071467/457868c7-1660-42be-b951-0b6b35b916a8)
 
@@ -89,7 +89,7 @@ Enable TailwindCSS compiler in configuration and unlock the power of [TailwindCS
 
     You can create your own tailwind.config.js inside your theme skin css directory
 
-    for example to enable preflight (disabled by default), add prefix like 'tw-' or add plugins.
+    for example to enable [preflight](https://tailwindcss.com/docs/preflight) (disabled by default), add prefix like 'tw-' or add plugins.
 
     **Example:**
 
