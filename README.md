@@ -5,7 +5,12 @@
 
 ---
 
-### Description
+## Requirements
+- [OpenMage](https://github.com/OpenMage/magento-lts) [^20.2.0] : starting from this version, tinyMCE 6 has been integrated
+
+> NOTE: With some modifications, it would also work with the old editor. If you're interested, open a pull request, but the advice is to update.
+
+## Description
 
 The extension creates a file copy and keeps it synced with the content of enabled static blocks and CMS pages.
 
@@ -127,13 +132,13 @@ Enable TailwindCSS compiler in configuration and unlock the power of [TailwindCS
 
 Screenshot
 ----------
+![demotailwindopenmage_template](https://github.com/OpenMage/magento-lts/assets/5071467/21998211-872f-4809-89a6-f71e093f5faa)
 ![demo1](https://github.com/magemega/openmage-mm_cmscontentfilemode/assets/5071467/6b23373f-db11-482a-b5c3-6c188b828324)
 ![demo2](https://github.com/magemega/openmage-mm_cmscontentfilemode/assets/5071467/dd2a3817-f183-4f24-a9cb-4640bdfefd9c)
 
 
 
-⚠️ Highly experimental
----------------------
+## ⚠️ Highly experimental
 
 You can configure TailwindCSS to look into all your theme files and forcibly recompile TailwindCSS while development (enabled only for Developer IPs).
 
@@ -163,15 +168,15 @@ module.exports = {
 ```
 > NOTE: It has never been tested, so I don't know what the performance of the binary compiler is with so many files.
 
-Support
+### Support
 -------
 If you have any issues with this extension, please open an issue on GitHub.
 
-Contribution
+### Contribution
 ------------
 Any contributions are highly appreciated. The best way to contribute code is to open a
 [pull request on GitHub](https://help.github.com/articles/using-pull-requests).
 
-Licence
+### Licence
 -------
 [OSL - Open Software Licence 3.0](http://opensource.org/licenses/osl-3.0.php)
