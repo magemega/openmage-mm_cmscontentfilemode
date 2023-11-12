@@ -22,7 +22,8 @@ In addition to this, it's possible to include the created files in a workflow fo
 
 File creation is disabled by default, you can enable one or more static blocks or pages in "System -> Configuration -> Content Management".
 
-![config](https://github.com/magemega/openmage-mm_cmscontentfilemode/assets/5071467/d6fadb7c-f297-44f6-9545-4f57182f29f5)
+![config](https://github.com/magemega/openmage-mm_cmscontentfilemode/assets/5071467/503d5d3e-46eb-4868-8fff-815e996bbeab)
+
 
 
 The files are created in the following locations:
@@ -72,8 +73,12 @@ Enable TailwindCSS compiler in configuration and unlock the power of [TailwindCS
     ```
     
     Then you can select the templates in tinyMCE and add to your content.
+    ![tinyMCETemplateBtn](https://github.com/magemega/openmage-mm_cmscontentfilemode/assets/5071467/93918c71-0587-4671-b753-6e766141b6ff)
+    ![tinyMCETemplatePopup](https://github.com/magemega/openmage-mm_cmscontentfilemode/assets/5071467/457868c7-1660-42be-b951-0b6b35b916a8)
 
-3. **Customize TailwindCSS compiler with your own tailwind.config.js and base file**
+
+
+4. **Customize TailwindCSS compiler with your own tailwind.config.js and base file**
 
     You can create your own tailwind.config.js inside your theme skin css directory
 
@@ -122,6 +127,10 @@ Enable TailwindCSS compiler in configuration and unlock the power of [TailwindCS
     ```
     <button class="my-button-primary">SEND</button>
     ```
+
+Screenshot
+----------
+![demo1](https://github.com/magemega/openmage-mm_cmscontentfilemode/assets/5071467/6b23373f-db11-482a-b5c3-6c188b828324)
 
 
 ⚠️ Highly experimental
