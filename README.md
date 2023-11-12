@@ -47,7 +47,7 @@ For example:
 - If your static block / page is assigned to multiple store views with different themes applied, files will be created in all corresponding locations
 
 ## ⚠️ Important ⚠️
-If you have multiple static blocks with the same identifier assigned to different views (done for translations), they will be overwritten with the latest modified version. This case is not yet supported and needs to be implemented.
+If you have multiple static blocks / pages with the same identifier assigned to different views (done for translations), they will be overwritten with the latest modified version. This case is not yet supported and needs to be implemented.
 
 
 ## 🔥 TailwindCSS Features [BETA]
