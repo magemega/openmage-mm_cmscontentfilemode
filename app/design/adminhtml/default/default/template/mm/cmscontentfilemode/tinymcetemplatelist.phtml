@@ -11,8 +11,11 @@ if(window.tinyMceWysiwygSetup)
         <?php if (is_array($_templateList) AND count($_templateList) > 0) : ?>
         settings.templates = <?php echo Zend_Json::encode($this->getTinyMCETemplateList()); ?>;
         <?php endif; ?>
+        <?php if ($this->isEnabled() AND $this->getAdditionalCss()) : ?>
+        settings.content_css = settings.content_css + ',<?php echo $this->getAdditionalCss(); ?>';
+        <?php endif; ?>
         return settings;
-    }        
+    }
 }
 //]]>
 </script>

@@ -178,9 +178,12 @@ class MM_CmsContentFileMode_Model_Observer
 
 	public function configTinyMceEditor(Varien_Event_Observer $observer)
 	{
-        // add tinymce tailwindcss content preview
+        /**
+         * setContentCss moved to app/design/adminhtml/default/default/template/mm/cmscontentfilemode/tinymcetemplatelist.phtml
+         * cause openMage removed "content_css: this.config.content_css" in js\mage\adminhtml\wysiwyg\tinymce\setup.js@getSettings()
+         */
 	    $config = $observer->getConfig();
-        if(is_array($this->getHelperTailwind()->getTinyMceAdditionalCss())){
+        /* if(is_array($this->getHelperTailwind()->getTinyMceAdditionalCss())){
 
 	    	$config->setContentCss( 
                 implode(',', [
@@ -188,7 +191,7 @@ class MM_CmsContentFileMode_Model_Observer
                     implode(',', $this->getHelperTailwind()->getTinyMceAdditionalCss())
                 ])
             );
-	    }
+	    } */
 
         // config template tailwindcss
         $configPlugins = $config->getData('plugins');
@@ -199,12 +202,12 @@ class MM_CmsContentFileMode_Model_Observer
             )
 	    );
         $config->setPlugins(array_merge($configPlugins, $templateWysiwygPlugin));
-        $config->setContentCss( 
+        /* $config->setContentCss( 
             implode(',', [
                 $config->getContentCss(),
                 $this->getHelperTailwindTinymcetemplates()->getPreviewCss()
             ])
-        );
+        ); */
 
 	}
 

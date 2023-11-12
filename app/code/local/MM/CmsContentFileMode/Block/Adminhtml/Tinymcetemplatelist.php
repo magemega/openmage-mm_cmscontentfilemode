@@ -14,4 +14,38 @@ class MM_CmsContentFileMode_Block_Adminhtml_Tinymcetemplatelist extends Mage_Adm
 		}
 	    return $templates;
 	}
+
+	public function isEnabled() {
+		return Mage::helper('mm_cmscontentfilemode')->isTailwindCompileEnabled();
+	}
+
+	/**
+	 * get additional css for render tailwindcss preview
+	 *
+	 * @return string|false
+	 */
+	public function getAdditionalCss() {
+		$_additionalCss = [];
+		if(is_array($this->getHelperTailwind()->getTinyMceAdditionalCss())) {
+            $_additionalCss = array_merge($_additionalCss, $this->getHelperTailwind()->getTinyMceAdditionalCss());
+	    }
+		if ($this->getHelperTailwindTinymcetemplates()->getPreviewCss()) {
+			$_additionalCss[] = $this->getHelperTailwindTinymcetemplates()->getPreviewCss();
+	    }
+	    return count($_additionalCss) > 0 ? implode(",", $_additionalCss) : false;
+	}
+
+	/**
+     * @return MM_CmsContentFileMode_Helper_Tailwindcss
+     */
+    public function getHelperTailwind() {
+        return Mage::helper('mm_cmscontentfilemode/tailwindcss');
+    }
+
+    /**
+     * @return MM_CmsContentFileMode_Helper_Tailwindcss_Tinymcetemplates
+     */
+    public function getHelperTailwindTinymcetemplates() {
+        return Mage::helper('mm_cmscontentfilemode/tailwindcss_tinymcetemplates');
+    }
 }
