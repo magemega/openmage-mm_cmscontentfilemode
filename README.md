@@ -1,21 +1,6 @@
 # Manage content of CMS Static blocks and Pages from files
 ## 🔥 Auto compile Tailwindcss [BETA]
-If you're a fan of Tailwind CSS, you must definitely try the BETA version that auto-compiles the files and generates a CSS with Tailwind classes!
-
-Check it out this branch: https://github.com/magemega/openmage-mm_cmscontentfilemode/tree/tailwindcss
-
-More info here: https://github.com/OpenMage/magento-lts/discussions/3629#discussioncomment-7496192
-
---
-
-### Description
-
-## 🔥 Auto compile Tailwindcss [BETA]
-If you're a fan of Tailwind CSS, you must definitely try the BETA version that auto-compiles the files and generates a CSS with Tailwind classes!
-
-Check it out this branch: https://github.com/magemega/openmage-mm_cmscontentfilemode/tree/tailwindcss
-
-More info here: https://github.com/OpenMage/magento-lts/discussions/3629#discussioncomment-7496192
+If you're a fan of Tailwind CSS, you must definitely try the BETA feature that auto-compiles the files and generates a CSS with Tailwind classes!
 
 --
 
@@ -50,7 +35,7 @@ For example:
 - files are correctly renamed if you modify the identifier or url_key
 - ! files are not deleted if a static block/page is removed 
 
-## 🔥 TailwindCSS Features
+## 🔥 TailwindCSS Features [BETA]
 
 Enable TailwindCSS compiler in configuration and unlock the power of [TailwindCSS](https://tailwindcss.com/docs/utility-first)!
 
