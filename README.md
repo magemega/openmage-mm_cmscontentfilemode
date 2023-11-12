@@ -139,11 +139,15 @@ Enable TailwindCSS compiler in configuration and unlock the power of [TailwindCS
 **TailwindCSS styles not rendered**
 
 If you don't see your Tailwind classes applied, make sure they are not being overridden by the CSS of your template.
+
 Example:
+
 ![css-issue](https://github.com/magemega/openmage-mm_cmscontentfilemode/assets/5071467/60bde99d-d485-42e9-97d8-2d52d58dca63)
 
 
-In this case, use `!text-white` and consider setting up a prefix like `tw-` for all Tailwind styles.
+In this case, use `!text-white` and consider to customize `tailwind.config.js` by adding a prefix `tw-` for all Tailwind styles.
+
+> NOTE: if you use a prefix add it after modifiers like `md:!tw-text-white`
 
 Screenshot
 ----------
