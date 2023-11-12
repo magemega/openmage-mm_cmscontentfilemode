@@ -58,7 +58,7 @@ Enable TailwindCSS compiler in configuration and unlock the power of [TailwindCS
     Example:
     
     `app/design/rwd/default/template/cms/tinymce_templates/grid-4-columns.html`
-    ```
+    ```html
         <div class="grid grid-cols-4 gap-4 font-mono text-white text-sm text-center font-bold leading-6 bg-stripes-fuchsia rounded-lg mt-12 mb-12">
             <div class="p-4 rounded-lg shadow-lg bg-fuchsia-500">01</div>
             <div class="p-4 rounded-lg shadow-lg bg-fuchsia-500">02</div>
@@ -88,7 +88,7 @@ Enable TailwindCSS compiler in configuration and unlock the power of [TailwindCS
 
     Customize TailwindCSS config:
     `app/design/frontend/rwd/default/css/tailwind.config.js`
-    ```
+    ```js
     /** @type {import('tailwindcss').Config} */
     module.exports = {
         prefix: '',
@@ -112,7 +112,7 @@ Enable TailwindCSS compiler in configuration and unlock the power of [TailwindCS
     You can also create your TailwindCSS entry point to add/remove components or extend layers
 
     `app/design/frontend/rwd/default/css/tailwind-base.css`
-    ```
+    ```css
     @tailwind base;
     @tailwind components;
     @tailwind utilities;
@@ -124,7 +124,7 @@ Enable TailwindCSS compiler in configuration and unlock the power of [TailwindCS
     }
     ```
     Then you can use in your content like:
-    ```
+    ```html
     <button class="my-button-primary">SEND</button>
     ```
 
@@ -139,7 +139,7 @@ Screenshot
 You can configure TailwindCSS to look into all your theme files and forcibly recompile TailwindCSS while development (enabled only for Developer IPs).
 
 Example:
-```
+```js
 /** @type {import('tailwindcss').Config} */
 module.exports = {
     prefix: '',
