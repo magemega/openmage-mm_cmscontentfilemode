@@ -1,8 +1,9 @@
 # Manage content of CMS Static blocks and Pages from files
-## 🔥 Auto compile Tailwindcss [BETA]
-If you're a fan of Tailwind CSS, you must definitely try the BETA feature that auto-compiles the files and generates a CSS with Tailwind classes!
+> ## 🔥 Auto compile Tailwindcss [BETA]
+> If you're a fan of Tailwind CSS, you must definitely try the BETA feature that auto-compiles the files and generates a CSS with Tailwind classes!
+> You can also create your own reusable templates and add them to TinyMCE!
 
---
+---
 
 ### Description
 
