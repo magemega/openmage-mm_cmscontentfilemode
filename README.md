@@ -135,7 +135,8 @@ Enable TailwindCSS compiler in configuration and unlock the power of [TailwindCS
 
 Screenshot
 ----------
-![demotailwindopenmage_template](https://github.com/OpenMage/magento-lts/assets/5071467/21998211-872f-4809-89a6-f71e093f5faa)
+![demotailwindopenmage_template](https://github.com/magemega/openmage-mm_cmscontentfilemode/assets/5071467/6fff76f3-53b3-4347-afcc-32a2f1553ad1)
+
 ![demo1](https://github.com/magemega/openmage-mm_cmscontentfilemode/assets/5071467/6b23373f-db11-482a-b5c3-6c188b828324)
 ![demo2](https://github.com/magemega/openmage-mm_cmscontentfilemode/assets/5071467/dd2a3817-f183-4f24-a9cb-4640bdfefd9c)
 
