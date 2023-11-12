@@ -18,6 +18,8 @@ The copy is kept synchronized in both directions, meaning that saving a static b
 
 This allows working directly on the file with all the benefits that an IDE can offer, such as auto-completion, syntax highlighting, and more, instead of working in the textarea.
 
+![demo-tailwindcss-ide](https://github.com/magemega/openmage-mm_cmscontentfilemode/assets/5071467/04a25905-63db-4f70-8243-8501d215de49)
+
 It is very useful when there is a lot of HTML markup in a CMS content, for example on the homepage or if you have to deal with themes that heavily rely on static blocks like Porto (which I particularly dislike because of this).
 
 In addition to this, it's possible to include the created files in a workflow for CSS purging for example (and this is the original purpose for which it was created).
