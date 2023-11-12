@@ -46,6 +46,10 @@ For example:
 - ! files are not deleted if a static block/page is removed
 - If your static block / page is assigned to multiple store views with different themes applied, files will be created in all corresponding locations
 
+## ⚠️ Important ⚠️
+If you have multiple static blocks with the same identifier assigned to different views (done for translations), they will be overwritten with the latest modified version. This case is not yet supported and needs to be implemented.
+
+
 ## 🔥 TailwindCSS Features [BETA]
 
 Enable TailwindCSS compiler in configuration and unlock the power of [TailwindCSS](https://tailwindcss.com/docs/utility-first)!
