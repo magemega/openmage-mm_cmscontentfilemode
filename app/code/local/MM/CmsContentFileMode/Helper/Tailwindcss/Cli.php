@@ -62,7 +62,7 @@ class MM_CmsContentFileMode_Helper_Tailwindcss_Cli extends Mage_Core_Helper_Abst
 
     private function getCmdOptions() {
         return implode(" ", array_map(function($key, $value) {
-            return sprintf("%s %s", $key, $value);
+            return sprintf("%s '%s'", $key, $value);
         }, array_keys($this->cmdOptions), $this->cmdOptions));
     }
 }
