@@ -2,17 +2,18 @@
 class MM_CmsContentFileMode_Helper_Tailwindcss_Tinymcetemplates extends Mage_Core_Helper_Abstract
 {
     const FILENAME_MD5 = '.tinymceTemplatesChecksum';
+    const FILEPATH_TAILWINDPREVIEWCSS = '/adminhtml/default/default/tailwindPreview.css';
     
     /**
      * Get tailwindcss preview css
      *
-     * @return string
+     * @return string|false
      */
     public function getPreviewCss(){
         if ($this->shouldRecompileTailwindcss()) {
             $this->compileTailwindCssTinymceTemplate();
         }
-        return Mage::getBaseUrl('skin').'/adminhtml/default/default/tailwindPreview.css';
+        return file_exists(Mage::getBaseDir('skin').self::FILEPATH_TAILWINDPREVIEWCSS) ? Mage::getBaseUrl('skin').self::FILEPATH_TAILWINDPREVIEWCSS : false;
     }
 
     /**
@@ -24,7 +25,7 @@ class MM_CmsContentFileMode_Helper_Tailwindcss_Tinymcetemplates extends Mage_Cor
 	{
         $_tailwindCli = $this->getTailwindCli();
         $_tailwindCli->setContent("../../app/design/frontend/*/*/template/cms/tinymce_templates/*.{htm,html,txt}");
-		$cssOutputPath = Mage::getBaseDir('skin').'/adminhtml/default/default/tailwindPreview.css';
+		$cssOutputPath = Mage::getBaseDir('skin').self::FILEPATH_TAILWINDPREVIEWCSS;
         $_tailwindCli->setOutput($cssOutputPath);
 
         $result = $this->getTailwindCli()->run();
