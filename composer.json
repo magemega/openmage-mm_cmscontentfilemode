@@ -1,0 +1,16 @@
+{
+  "name": "empiricompany/openmage-mm_cmscontentfilemode",
+  "license": "OSL-3.0",
+  "type": "magento-module",
+  "description": "OpenMage / Magento 1.9 module extension that allows to work on static files for CMS Static Blocks / Pages content. ",
+  "keywords": [
+    "magento",
+    "magento1",
+    "openmage"
+  ],
+  "homepage": "https://github.com/empiricompany/openmage-mm_cmscontentfilemode",
+  "require": {
+    "php": "^7.4||^8.0",
+    "magento-hackathon/magento-composer-installer": "*"
+  }
+}
